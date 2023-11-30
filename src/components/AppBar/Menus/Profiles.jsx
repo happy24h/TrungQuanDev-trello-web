@@ -32,8 +32,8 @@ function Profiles() {
           aria-expanded={open ? 'true' : undefined}
         >
           <Avatar
-            sx={{ width: 30, height: 30 }}
-            alt="avatar"
+            sx={{ width: 36, height: 36 }}
+            alt="dev better"
             src="https://www.devbetter.pro/static/media/happy_learning.ff50107dce7c0d9d2539.jpg"
           />
         </IconButton>
