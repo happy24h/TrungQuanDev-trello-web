@@ -181,8 +181,6 @@ function BoardContent({ board }) {
   }
 
   const handleDragEnd = (event) => {
-    // console.log("handleDragEnd: ", event)
-
     const { active, over } = event
 
     // Cần đảm bảo nếu không tồn tại active hoặc over (khi kéo ra khỏi phạm vi container) thì không làm gì (tránh crash trang)
