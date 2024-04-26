@@ -32,7 +32,7 @@ function ListCards({ cards }) {
         {cards?.map((card) => (
           <Card key={card._id} card={card} />
         ))}
-        <Card />
+        {/* <Card /> */}
       </Box>
 
     </SortableContext>
