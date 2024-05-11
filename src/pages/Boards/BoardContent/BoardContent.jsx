@@ -298,17 +298,20 @@ function BoardContent({ board }) {
     }
 
     const pointerIntersections = pointerWithin(args)
+    console.log('pointerIntersections: ', pointerIntersections)
 
-    // Thuật toán phát hiện va chạm sẽ trả về một mảng các va chạm ở đây
-    const intersections = !!pointerIntersections?.length > 0 ? pointerIntersections : rectIntersection(args)
+    if (!pointerIntersections?.length) return
+
+    // Thuật toán phát hiện va chạm sẽ trả về một mảng các va chạm ở đây (không cần bước này nữa - video 37.1)
+    // const intersections = !!pointerIntersections?.length > 0 ? pointerIntersections : rectIntersection(args)
 
     // Tìm overId đầu tiên trong đám intersections ở trên
-    let overId = getFirstCollision(intersections, 'id')
+    let overId = getFirstCollision(pointerIntersections, 'id')
     if (overId) {
 
       const checkColumn = orderedColumns.find(column => column._id === overId)
       if (checkColumn) {
-        overId = closestCenter({
+        overId = closestCorners({
           ...args,
           droppableContainers: args.droppableContainers.filter(container => {
             return (container.id !== overId) && (checkColumn?.cardOrderIds?.includes(container.id))
