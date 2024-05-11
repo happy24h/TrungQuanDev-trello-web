@@ -17,9 +17,10 @@ import {
 } from '@dnd-kit/core'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
+import { generatePlaceholderCard } from '~/utils/formatters'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -98,6 +99,12 @@ function BoardContent({ board }) {
           (card) => card._id !== activeDraggingCardId
         )
 
+        // Thêm Placeholder Card nếu column rỗng: bị kéo hết card đi, không còn cái nào nữa. (video 37.2)
+        if (isEmpty(nextActiveColumn.cards)) {
+          console.log('Card cuối cùng bị kéo đi')
+          nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)]
+        }
+
         // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
         nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map(
           (card) => card._id
@@ -123,6 +130,9 @@ function BoardContent({ board }) {
           0,
           rebuild_activeDraggingCardData
         )
+
+        // Xóa cái Placeholder Card đi nếu nó đang tồn tại (Video 37.2)
+        nextOverColumn.cards = nextOverColumn.cards.filter(card => !card?.FE_PlaceholderCard)
 
         // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map(
@@ -153,7 +163,7 @@ function BoardContent({ board }) {
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) return
 
     // còn nếu kéo card thì xử lý thêm để có thể kéo card qua lại giữa các columns
-    console.log('handleDragOver: ', event)
+    // console.log('handleDragOver: ', event)
     const { active, over } = event
     if (!active || !over) return
 
